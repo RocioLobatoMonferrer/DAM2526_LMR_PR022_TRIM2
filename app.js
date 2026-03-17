@@ -35,6 +35,7 @@ const intentosNumero = document.querySelector("#intentosNumero");
 const timeOut = 2000;
 let numeroAdivinar;
 let numeros = [];
+let intentos = 0;
 
 
 function init() {
@@ -44,13 +45,26 @@ function init() {
         if(!validad()) {
             return;
         }  
+
+        contarIntentos();
+
+        if(repetidos()) {
+            mostrarMensaje("Ya has colocado este número antes");
+            return;
+        }
+        
+        almacenarNumeros();
         comprobarNumero();
+
     })
 
     btnReiniciarNumero.addEventListener("click", () => {
         numeroAdivinar = generarNumeroAleatorio(100);
         numero.value = "";
-        intentosNumero.value = 0;
+        intentosNumero.textContent = 0;
+        numeros = [];
+        intentos = 0;
+        limpiarMensaje();
     })
 }
 
@@ -61,43 +75,51 @@ function generarNumeroAleatorio(max) {
 }
 
 function validad() {
+      if(numero.value.trim() == "") {
+         mostrarMensaje("Debes introducir un número");
+         return false;
+    }
+
     if(!numero.checkValidity()) {
         mostrarMensaje("Debes introducir un número entre 1 y 100");
         return false;
-    }
-    if(numero.value.trim() == "") {
-         mostrarMensaje("Debes introducir un número");
-         return false;
     }
 
     return true;
 }
 
+function contarIntentos() {
+    intentosNumero.textContent = ++intentos;
+}
+
 function almacenarNumeros() {
-    if(numero.value != numeroAdivinar.value) {
-        numeros.push(numero);
+    if(numero.value != numeroAdivinar) {
+        numeros.push(Number(numero.value));
     }
 }
 
-function repetido() {
+function repetidos() {
     for(let i = 0; i < numeros.length; i++) {
-        
+        if(numeros[i] === Number(numero.value)) {
+            return true;
+        } 
     }
+    return false;
 }
 
 function comprobarNumero() {
-    if(numero.value != numeroAdivinar.value) {
-        if(Math.abs(numero.value - numeroAdivinar.value) > 20) {
-            mostrarMensaje("Frío, frío");
+    if(Number(numero.value) != numeroAdivinar) {
+        if(Math.abs(numero.value - numeroAdivinar) > 20) {
+            mostrarMensaje("Frío, frío...");
         } 
-        if (Math.abs(numero.value - numeroAdivinar.value) >= 10 && Math.abs(numero.value - numeroAdivinar.value) <= 20) {
-            mostrarMensaje("Caliente! Caliente");
+        if (Math.abs(numero.value - numeroAdivinar) >= 10 && Math.abs(numero.value - numeroAdivinar) <= 20) {
+            mostrarMensaje("¡Caliente! ¡Caliente!");
         } 
-        if (Math.abs(numero.value - numeroAdivinar.value) < 10) {
-            mostrarMensaje("Te quemas!!!");
+        if (Math.abs(numero.value - numeroAdivinar) < 10) {
+            mostrarMensaje("¡¡¡Te quemas!!!");
         }
     } else {
-        mostrarMensaje("Felicidades, has acertado el número secreto");
+        mostrarMensaje("¡Felicidades! Has acertado el número secreto");
     }
 }
 
@@ -142,7 +164,7 @@ const listaHistorialPPT = document.querySelector("#listaHistorialPPT");
 
 let jugadas = [];
 
-function init() {
+/*function init() {
     btnTijera.addEventListener("click", () => {
 
     })
@@ -157,7 +179,7 @@ function init() {
     })
 }
 
-init();
+init();**/
 
 
 
